@@ -47,6 +47,103 @@ function kababi_child_preload_first_visit_assets() {
 <?php
 }
 
+add_action( 'wp_enqueue_scripts', 'kababi_child_dequeue_unused_ova_events_assets', 100 );
+function kababi_child_dequeue_unused_ova_events_assets() {
+    if ( is_admin() || kababi_child_page_uses_ova_events() ) {
+        return;
+    }
+
+    $styles = array(
+        'fontawesome',
+        'elegant_font',
+        'select2',
+        'calendar',
+        'event-frontend',
+    );
+
+    $scripts = array(
+        'script-elementor-event',
+        'event-frontend-js',
+        'select2',
+        'calendar',
+        'popper',
+        'tooltip',
+    );
+
+    foreach ( $styles as $handle ) {
+        wp_dequeue_style( $handle );
+        wp_deregister_style( $handle );
+    }
+
+    foreach ( $scripts as $handle ) {
+        wp_dequeue_script( $handle );
+        wp_deregister_script( $handle );
+    }
+}
+
+add_action( 'wp_enqueue_scripts', 'kababi_child_dequeue_empty_animation_styles', 101 );
+function kababi_child_dequeue_empty_animation_styles() {
+    $handles = array(
+        'e-animation-ova-move-up',
+        'e-animation-ova-move-down',
+        'e-animation-ova-move-left',
+        'e-animation-ova-move-right',
+        'e-animation-ova-scale-up',
+        'e-animation-ova-flip',
+        'e-animation-ova-helix',
+        'e-animation-ova-popup',
+    );
+
+    foreach ( $handles as $handle ) {
+        wp_dequeue_style( $handle );
+        wp_deregister_style( $handle );
+    }
+}
+
+function kababi_child_page_uses_ova_events() {
+    if ( is_singular( 'event' ) || is_post_type_archive( 'event' ) || is_tax( array( 'event_cat', 'event_tag' ) ) ) {
+        return true;
+    }
+
+    if ( ! is_singular() ) {
+        return false;
+    }
+
+    $post = get_post();
+
+    if ( ! $post || empty( $post->post_content ) ) {
+        return false;
+    }
+
+    $shortcodes = array(
+        'ovaev_calendar',
+        'ovaev_fullcalendar',
+        'ovaev_slide',
+        'ovaev_slide_ajax',
+        'ovaev_search_ajax',
+        'ovaev_shortcode_tabs',
+        'ovaev_shortcode_related',
+        'ovaev_shortcode_share',
+        'ovaev_shortcode_categories',
+        'ovaev_shortcode_content',
+        'ovaev_shortcode_navigation',
+        'ovaev_shortcode_time',
+        'ovaev_shortcode_tags',
+        'ovaev_shortcode_date',
+        'ovaev_shortcode_location',
+        'ovaev_shortcode_thumbnail',
+        'ovaev_shortcode_title',
+    );
+
+    foreach ( $shortcodes as $shortcode ) {
+        if ( has_shortcode( $post->post_content, $shortcode ) ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function kababi_child_apply_lazy_images( $html ) {
     if ( ! class_exists( 'WP_HTML_Tag_Processor' ) || false === stripos( $html, '<img' ) ) {
         return $html;
