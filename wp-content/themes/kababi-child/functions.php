@@ -40,8 +40,8 @@ function kababi_child_preload_first_visit_assets() {
         return;
     }
     ?>
-<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
-<link rel="preconnect" href="https://sp.zalo.me" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="https://laboon.vn/wp-content/uploads/2021/09/bg_slide_h2.jpg" fetchpriority="high">
 <link rel="preload" as="image" href="https://laboon.vn/wp-content/uploads/2025/06/cover-copy1_1.webp" type="image/webp" fetchpriority="high">
 <?php
@@ -167,7 +167,9 @@ function kababi_child_apply_lazy_images( $html ) {
         }
     }
 
-    return kababi_child_defer_non_critical_scripts( $processor->get_updated_html() );
+    $html = $processor->get_updated_html();
+    $html = kababi_child_add_font_display_swap( $html );
+    return kababi_child_defer_non_critical_scripts( $html );
 }
 
 function kababi_child_should_lazy_load_image( $processor, $image_index, $eager_image_skip ) {
@@ -200,10 +202,60 @@ function kababi_child_should_lazy_load_image( $processor, $image_index, $eager_i
     return true;
 }
 
-function kababi_child_defer_non_critical_scripts( $html ) {
-    return str_replace(
-        '<script src="https://sp.zalo.me/plugins/sdk.js"></script>',
-        '<script src="https://sp.zalo.me/plugins/sdk.js" defer></script>',
+function kababi_child_add_font_display_swap( $html ) {
+    return preg_replace_callback(
+        '/(fonts\.googleapis\.com\/css2?\?[^"\'\s>]*)/i',
+        function ( $m ) {
+            if ( false === stripos( $m[1], 'display=' ) ) {
+                return $m[1] . '&display=swap';
+            }
+            return $m[1];
+        },
         $html
     );
+}
+
+function kababi_child_defer_non_critical_scripts( $html ) {
+    $zalo_original = '<script src="https://sp.zalo.me/plugins/sdk.js"></script>';
+    $zalo_lazy     = '<script id="laboon-zalo-lazy">'
+        . '(function(){var d=!1;function l(){if(!d){d=!0;var s=document.createElement("script");'
+        . 's.src="https://sp.zalo.me/plugins/sdk.js";document.body.appendChild(s);}'
+        . '}["scroll","mousemove","touchstart","click","keydown"].forEach(function(e){'
+        . 'window.addEventListener(e,l,{once:!0,passive:!0})});'
+        . 'window.addEventListener("load",function(){setTimeout(l,4000)});})()';
+
+    return str_replace( $zalo_original, $zalo_lazy, $html );
+}
+
+add_filter( 'script_loader_tag', 'kababi_child_selective_defer_scripts', 10, 3 );
+function kababi_child_selective_defer_scripts( $tag, $handle, $src ) {
+    if ( is_admin() ) {
+        return $tag;
+    }
+
+    $no_defer_handles = array(
+        'jquery-core',
+        'jquery-migrate',
+        'jquery',
+        'masonry',
+        'imagesloaded',
+        'jquery-masonry',
+        'gallery',
+        'tp-tools',
+        'revmin',
+    );
+
+    if ( in_array( $handle, $no_defer_handles, true ) || false !== strpos( $handle, 'revslider' ) ) {
+        return $tag;
+    }
+
+    if ( false !== strpos( $tag, ' defer' ) || false !== strpos( $tag, ' async' ) ) {
+        return $tag;
+    }
+
+    if ( false === strpos( $tag, ' src=' ) ) {
+        return $tag;
+    }
+
+    return str_replace( ' src=', ' defer src=', $tag );
 }
