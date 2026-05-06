@@ -259,3 +259,101 @@ function kababi_child_selective_defer_scripts( $tag, $handle, $src ) {
 
     return str_replace( ' src=', ' defer src=', $tag );
 }
+
+/**
+ * Phase 01B: Additional PageSpeed optimizations.
+ */
+
+// 1.5 – Force font-display:swap on Elementor-loaded Google Fonts.
+add_filter( 'elementor/frontend/google_font_url', 'kababi_child_elementor_font_swap' );
+function kababi_child_elementor_font_swap( $url ) {
+    if ( false === strpos( $url, 'display=' ) ) {
+        $url .= '&display=swap';
+    }
+    return $url;
+}
+
+// 1.6 – Async load non-critical CSS to eliminate render blocking.
+add_filter( 'style_loader_tag', 'kababi_child_async_noncritical_css', 10, 4 );
+function kababi_child_async_noncritical_css( $html, $handle, $href, $media ) {
+    if ( is_admin() ) {
+        return $html;
+    }
+
+    // Keep critical CSS loading normally (above-the-fold).
+    $critical_handles = array(
+        'kababi-style',
+        'child-style',
+        'elementor-frontend',
+        'elementor-common',
+        'elementor-global',
+        'elementor-post-',
+        'google-fonts-',
+        'e-animations',
+    );
+
+    foreach ( $critical_handles as $prefix ) {
+        if ( 0 === strpos( $handle, $prefix ) || $handle === $prefix ) {
+            return $html;
+        }
+    }
+
+    // Convert non-critical CSS to async loading pattern.
+    if ( false !== strpos( $html, "media='all'" ) ) {
+        return str_replace(
+            "media='all'",
+            "media='print' onload=\"this.media='all'\"",
+            $html
+        );
+    }
+
+    return $html;
+}
+
+// 1.7 – Dequeue RevSlider assets on non-homepage (only used there).
+add_action( 'wp_enqueue_scripts', 'kababi_child_dequeue_revslider_off_home', 102 );
+function kababi_child_dequeue_revslider_off_home() {
+    if ( is_front_page() || is_admin() ) {
+        return;
+    }
+
+    // Dequeue all RevSlider CSS and JS on pages that don't use it.
+    global $wp_styles, $wp_scripts;
+
+    if ( ! empty( $wp_styles->registered ) ) {
+        foreach ( $wp_styles->registered as $handle => $style ) {
+            if ( false !== strpos( $handle, 'rs-plugin' ) || false !== strpos( $handle, 'revslider' ) || false !== strpos( $handle, 'rev-slide' ) ) {
+                wp_dequeue_style( $handle );
+            }
+        }
+    }
+
+    if ( ! empty( $wp_scripts->registered ) ) {
+        foreach ( $wp_scripts->registered as $handle => $script ) {
+            if ( false !== strpos( $handle, 'tp-tools' ) || false !== strpos( $handle, 'revmin' ) || false !== strpos( $handle, 'revslider' ) || false !== strpos( $handle, 'rev-slide' ) ) {
+                wp_dequeue_script( $handle );
+            }
+        }
+    }
+}
+
+// 1.8 – Dequeue unused Roboto Slab font (loaded but not used on any element).
+add_action( 'wp_enqueue_scripts', 'kababi_child_dequeue_unused_fonts', 102 );
+function kababi_child_dequeue_unused_fonts() {
+    if ( is_admin() ) {
+        return;
+    }
+
+    global $wp_styles;
+
+    if ( empty( $wp_styles->registered ) ) {
+        return;
+    }
+
+    foreach ( $wp_styles->registered as $handle => $style ) {
+        if ( ! empty( $style->src ) && false !== strpos( $style->src, 'roboto-slab' ) ) {
+            wp_dequeue_style( $handle );
+            break;
+        }
+    }
+}
