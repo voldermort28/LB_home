@@ -27,7 +27,7 @@ function kababi_enqueue_styles() {
 
 add_action( 'template_redirect', 'kababi_child_buffer_lazy_images', 1 );
 function kababi_child_buffer_lazy_images() {
-    if ( is_admin() || is_feed() || is_preview() || wp_doing_ajax() || wp_is_json_request() ) {
+    if ( is_admin() || is_user_logged_in() || is_feed() || is_preview() || wp_doing_ajax() || wp_is_json_request() ) {
         return;
     }
 
@@ -229,7 +229,7 @@ function kababi_child_defer_non_critical_scripts( $html ) {
 
 add_filter( 'script_loader_tag', 'kababi_child_selective_defer_scripts', 10, 3 );
 function kababi_child_selective_defer_scripts( $tag, $handle, $src ) {
-    if ( is_admin() ) {
+    if ( is_admin() || is_user_logged_in() ) {
         return $tag;
     }
 
@@ -243,6 +243,8 @@ function kababi_child_selective_defer_scripts( $tag, $handle, $src ) {
         'gallery',
         'tp-tools',
         'revmin',
+        'swiper',
+        'elementor-frontend',
     );
 
     if ( in_array( $handle, $no_defer_handles, true ) || false !== strpos( $handle, 'revslider' ) ) {
@@ -276,7 +278,7 @@ function kababi_child_elementor_font_swap( $url ) {
 // 1.6 – Async load non-critical CSS to eliminate render blocking.
 add_filter( 'style_loader_tag', 'kababi_child_async_noncritical_css', 10, 4 );
 function kababi_child_async_noncritical_css( $html, $handle, $href, $media ) {
-    if ( is_admin() ) {
+    if ( is_admin() || is_user_logged_in() ) {
         return $html;
     }
 
@@ -313,7 +315,7 @@ function kababi_child_async_noncritical_css( $html, $handle, $href, $media ) {
 // 1.7 – Dequeue RevSlider assets on non-homepage (only used there).
 add_action( 'wp_enqueue_scripts', 'kababi_child_dequeue_revslider_off_home', 102 );
 function kababi_child_dequeue_revslider_off_home() {
-    if ( is_front_page() || is_admin() ) {
+    if ( is_front_page() || is_admin() || is_user_logged_in() ) {
         return;
     }
 
@@ -340,7 +342,7 @@ function kababi_child_dequeue_revslider_off_home() {
 // 1.8 – Dequeue unused Roboto Slab font (loaded but not used on any element).
 add_action( 'wp_enqueue_scripts', 'kababi_child_dequeue_unused_fonts', 102 );
 function kababi_child_dequeue_unused_fonts() {
-    if ( is_admin() ) {
+    if ( is_admin() || is_user_logged_in() ) {
         return;
     }
 

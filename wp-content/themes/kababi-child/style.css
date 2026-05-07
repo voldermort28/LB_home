@@ -8,3 +8,25 @@ Version: 1.0.0
 Tags: two-columns, three-columns, left-sidebar, right-sidebar, custom-menu, editor-style, featured-images, flexible-header, full-width-template, post-formats, rtl-language-support, sticky-post, translation-ready
 Text Domain:  kababi-child
 */
+
+/* Force Full Width for Banners */
+.elementor-element-beae07d,
+.elementor-element-c74495b {
+    max-width: 100vw !important;
+    width: 100vw !important;
+    padding: 0 !important;
+    margin-left: calc(-50vw + 50%) !important;
+    margin-right: calc(-50vw + 50%) !important;
+}
+.elementor-element-beae07d .elementor-widget-container,
+.elementor-element-c74495b .elementor-widget-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+}
+.elementor-element-beae07d .swiper-slide img,
+.elementor-element-c74495b .swiper-slide img {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    object-fit: cover;
+}
