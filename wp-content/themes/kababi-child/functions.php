@@ -359,3 +359,6 @@ function kababi_child_dequeue_unused_fonts() {
         }
     }
 }
+
+// Include custom shortcodes
+require_once get_stylesheet_directory() . '/includes/shortcode-stores.php';
