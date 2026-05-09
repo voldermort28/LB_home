@@ -415,3 +415,66 @@ Text Domain:  kababi-child
         grid-template-columns: 1fr;
     }
 }
+
+/* ==========================================================================
+   PRODUCT CATEGORY GRID (CÁC DÒNG SẢN PHẨM)
+   ========================================================================== */
+.ova-menu-category {
+    margin-bottom: 30px;
+    padding-bottom: 25px; /* Space for the overlapping title */
+}
+
+.ova-menu-category .menu-category {
+    background-color: #fdfaf3; /* light cream */
+    padding: 30px 20px 40px 20px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.ova-menu-category .menu-category:hover {
+    transform: translateY(-10px);
+}
+
+.ova-menu-category .menu-category img {
+    max-width: 90%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    transition: transform 0.3s ease;
+}
+
+.ova-menu-category .menu-category:hover img {
+    transform: scale(1.05);
+}
+
+.ova-menu-category .menu-category .title {
+    background-color: #ffffff;
+    color: #2d3748;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 15px 10px;
+    position: absolute;
+    bottom: -25px;
+    left: 10%;
+    width: 80%;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    text-align: center;
+    z-index: 2;
+}
+
+.ova-menu-category .menu-category .title a {
+    color: inherit;
+}
+
+/* Staggered (Zigzag) Layout for 4 columns */
+@media (min-width: 768px) {
+    .elementor-container > .elementor-column:nth-child(even) .elementor-widget-kababi_elementor_menu-category {
+        transform: translateY(40px);
+    }
+    .elementor-container > .elementor-column:nth-child(even) .elementor-widget-kababi_elementor_menu-category:hover .menu-category {
+        /* offset the hover effect so it doesn't break */
+        transform: translateY(-10px); 
+    }
+}
