@@ -294,3 +294,126 @@ Text Domain:  kababi-child
         padding: 24px;
     }
 }
+
+/* ==========================================================================
+   BLOG / TIN TỨC GRID LAYOUT
+   ========================================================================== */
+.blog #main-content .default,
+.archive #main-content .default {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px 30px;
+}
+
+.blog #main-content .default::before,
+.blog #main-content .default::after,
+.archive #main-content .default::before,
+.archive #main-content .default::after {
+    display: none; /* Remove any clearfix that might break grid */
+}
+
+.blog #main-content .default .post-wrap,
+.archive #main-content .default .post-wrap {
+    margin-bottom: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.blog #main-content .default .post-media,
+.archive #main-content .default .post-media {
+    margin-bottom: 16px;
+    border-radius: 0;
+    overflow: hidden;
+}
+
+.blog #main-content .default .post-media img,
+.archive #main-content .default .post-media img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.blog #main-content .default .post-wrap:hover .post-media img,
+.archive #main-content .default .post-wrap:hover .post-media img {
+    transform: scale(1.05);
+}
+
+.blog #main-content .default .post-title,
+.archive #main-content .default .post-title {
+    font-size: 20px;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+
+.blog #main-content .default .post-title a,
+.archive #main-content .default .post-title a {
+    color: #2d3748;
+}
+
+.blog #main-content .default .post-title a:hover,
+.archive #main-content .default .post-title a:hover {
+    color: #00b14f; /* Laboon green or hover color */
+}
+
+/* Hide unwanted elements */
+.blog #main-content .default .post-excerpt,
+.archive #main-content .default .post-excerpt,
+.blog #main-content .default .readmore,
+.archive #main-content .default .readmore,
+.blog #main-content .default .post-meta .author,
+.archive #main-content .default .post-meta .author,
+.blog #main-content .default .post-meta .comment,
+.archive #main-content .default .post-meta .comment {
+    display: none !important;
+}
+
+/* Meta styling */
+.blog #main-content .default .post-meta,
+.archive #main-content .default .post-meta {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.blog #main-content .default .post-meta ul,
+.archive #main-content .default .post-meta ul {
+    margin: 0;
+    padding: 0;
+}
+
+.blog #main-content .default .post-meta .date,
+.archive #main-content .default .post-meta .date {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.blog #main-content .default .post-meta .date i,
+.archive #main-content .default .post-meta .date i {
+    color: #8cc454; /* Green icon */
+    font-size: 16px;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .blog #main-content .default,
+    .archive #main-content .default {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    .blog #main-content .default,
+    .archive #main-content .default {
+        grid-template-columns: 1fr;
+    }
+}
