@@ -415,3 +415,54 @@ Text Domain:  kababi-child
         grid-template-columns: 1fr;
     }
 }
+
+/* ==========================================================================
+   PRODUCT CATEGORY GRID (POP-OUT LOOK + ZIGZAG)
+   ========================================================================== */
+.ova-menu-category {
+    margin-bottom: 20px;
+    padding-top: 50px; /* Space for the overflowing image */
+}
+
+.ova-menu-category .menu-category {
+    background-color: #f2f2f2;
+    border-radius: 24px;
+    padding: 0 20px 20px 20px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.ova-menu-category .menu-category:hover {
+    transform: translateY(-5px);
+}
+
+.ova-menu-category .menu-category img {
+    max-width: 90%;
+    height: auto;
+    display: block;
+    margin: -50px auto 15px auto; /* Pull image up out of the box */
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 15px 10px rgba(0,0,0,0.12));
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.ova-menu-category .menu-category:hover img {
+    transform: translateY(-5px) scale(1.03);
+    filter: drop-shadow(0 20px 15px rgba(0,0,0,0.15));
+}
+
+.ova-menu-category .menu-category .title {
+    color: #164769;
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+/* Staggered (Zigzag) Layout */
+@media (min-width: 768px) {
+    .elementor-container > .elementor-column:nth-child(even) .elementor-widget-kababi_elementor_menu-category {
+        transform: translateY(40px);
+    }
+}
