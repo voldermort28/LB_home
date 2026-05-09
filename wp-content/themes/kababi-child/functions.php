@@ -362,3 +362,13 @@ function kababi_child_dequeue_unused_fonts() {
 
 // Include custom shortcodes
 require_once get_stylesheet_directory() . '/includes/shortcode-stores.php';
+
+/**
+ * Custom Posts Per Page for Blog/Archive
+ */
+add_action( 'pre_get_posts', 'laboon_custom_posts_per_page' );
+function laboon_custom_posts_per_page( $query ) {
+    if ( !is_admin() && $query->is_main_query() && (is_home() || is_archive() || is_category()) ) {
+        $query->set( 'posts_per_page', 9 );
+    }
+}
