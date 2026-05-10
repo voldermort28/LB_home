@@ -50,9 +50,18 @@ img[data-src]:not([src]), img.swiper-lazy:not(.swiper-lazy-loaded) {
     opacity: 0 !important;
     visibility: hidden !important;
 }
+/* Prevent stacking: hide all slides except the first one before Swiper initializes */
+.swiper-container:not(.swiper-initialized) .swiper-slide:not(:first-child),
+.swiper:not(.swiper-initialized) .swiper-slide:not(:first-child) {
+    display: none !important;
+}
+.swiper-container:not(.swiper-initialized),
+.swiper:not(.swiper-initialized) {
+    overflow: hidden !important;
+}
 .swiper-slide-inner {
     position: relative;
-    min-height: 300px; /* Adjust based on typical banner height */
+    min-height: 400px; /* Adjust based on typical banner height */
     background-color: #f0f0f0; /* Skeleton background */
     display: flex;
     align-items: center;
