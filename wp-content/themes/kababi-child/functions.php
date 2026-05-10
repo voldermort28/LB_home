@@ -45,10 +45,37 @@ function kababi_child_preload_first_visit_assets() {
 <link rel="preload" as="image" href="https://laboon.vn/wp-content/uploads/2021/09/bg_slide_h2.jpg" fetchpriority="high">
 <link rel="preload" as="image" href="https://laboon.vn/wp-content/uploads/2025/06/cover-copy1_1.webp" type="image/webp" fetchpriority="high">
 <style>
-/* Fix Swiper lazy load FOUC (broken image icon) */
+/* Skeleton and Spinner for Swiper lazy load */
 img[data-src]:not([src]), img.swiper-lazy:not(.swiper-lazy-loaded) {
     opacity: 0 !important;
     visibility: hidden !important;
+}
+.swiper-slide-inner {
+    position: relative;
+    min-height: 300px; /* Adjust based on typical banner height */
+    background-color: #f0f0f0; /* Skeleton background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.swiper-lazy-preloader {
+    width: 42px;
+    height: 42px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -21px;
+    margin-top: -21px;
+    z-index: 10;
+    transform-origin: 50%;
+    animation: swiper-preloader-spin 1s infinite linear;
+    box-sizing: border-box;
+    border: 4px solid #046181; /* Laboon Blue */
+    border-radius: 50%;
+    border-top-color: transparent;
+}
+@keyframes swiper-preloader-spin {
+    100% { transform: rotate(360deg); }
 }
 </style>
 <?php
