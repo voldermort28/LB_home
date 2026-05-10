@@ -44,6 +44,13 @@ function kababi_child_preload_first_visit_assets() {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="https://laboon.vn/wp-content/uploads/2021/09/bg_slide_h2.jpg" fetchpriority="high">
 <link rel="preload" as="image" href="https://laboon.vn/wp-content/uploads/2025/06/cover-copy1_1.webp" type="image/webp" fetchpriority="high">
+<style>
+/* Fix Swiper lazy load FOUC (broken image icon) */
+img[data-src]:not([src]), img.swiper-lazy:not(.swiper-lazy-loaded) {
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+</style>
 <?php
 }
 
