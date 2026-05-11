@@ -578,7 +578,8 @@ Text Domain:  kababi-child
     line-height: 1.3 !important;
 }
 
-.ova-menu-category .menu-category:hover .title {
+.ova-menu-category .menu-category:hover .title,
+.swiper-slide-active .ova-menu-category .menu-category .title {
     color: #ffffff !important;
     font-size: 24px !important; /* Larger text on hover */
     font-weight: 900 !important;

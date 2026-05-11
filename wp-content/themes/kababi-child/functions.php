@@ -476,10 +476,11 @@ function laboon_mobile_category_slider() {
                             centeredSlides: true,
                             slidesPerView: 'auto',
                             loop: true,
+                            loopedSlides: 4, // Ensures infinite loop works with auto slides
                             coverflowEffect: {
                                 rotate: 0,
-                                stretch: -30, // Pulls side slides slightly under the center slide
-                                depth: 100, // Scales down the side slides
+                                stretch: -70, // Pulls side slides under the center slide significantly
+                                depth: 250, // Scales down the side slides
                                 modifier: 1,
                                 slideShadows: false,
                             },
