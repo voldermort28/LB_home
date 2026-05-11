@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-11T03:00:00+07:00",
+  "updated_at": "2026-05-12T03:15:00+07:00",
   "working_on": {
     "feature": "Homepage Product Grid & Banner Optimization",
     "task": "Redesign category grid (Starbucks style) & Fix Swiper FOUC",
@@ -61,6 +61,12 @@
       "type": "bugfix",
       "description": "Tinh chỉnh lại toạ độ ly nước trên Desktop (-100px -10%) và fix triệt để lỗi thẻ bị cắt góc (overflow: hidden -> visible). Thay thế hình nền hover bằng ảnh tĩnh background_hover_lite.jpg.",
       "location": "style.css"
+    },
+    {
+      "timestamp": "2026-05-12T03:00:00+07:00",
+      "type": "bugfix",
+      "description": "Fix lỗi Swiper Infinite Loop trên mobile bị trống thẻ 2 bên và không tự lặp vòng tròn. Tinh chỉnh độ lấp ló của 2 thẻ bên cạnh (stretch: 0, depth: 250) và thêm hiệu ứng drop-shadow cho thẻ Active. Nới rộng padding-top để các ly nước cao không bị cắt xén.",
+      "location": "functions.php, style.css"
     }
   ],
   "errors_encountered": [
@@ -78,6 +84,11 @@
       "error": "Lỗi 5 skeleton loader xếp chồng lên nhau do Swiper chưa initialize",
       "solution": "Thêm CSS ẩn tất cả các slide (display: none) trừ slide đầu tiên (first-child) khi Swiper chưa có class swiper-initialized.",
       "resolved": true
+    },
+    {
+      "error": "Lỗi vòng lặp (loop) của Swiper bị vô hiệu hoá trên Mobile do vùng chứa có width=0px lúc khởi tạo (ẩn trong hiệu ứng Elementor)",
+      "solution": "Viết lại setInterval để kiểm tra `offsetWidth > 0` và bổ sung các flag `observer: true`, `observeParents: true`, `loopAdditionalSlides` để bắt Swiper tính lại kích thước.",
+      "resolved": true
     }
   ],
   "context_checkpoints": [
@@ -92,6 +103,12 @@
       "trigger": "user_command_save_brain",
       "summary": "Fix lỗi overflow CSS, tinh chỉnh toạ độ ly nước chính xác và thay hình nền background_hover_lite.jpg.",
       "message_count": 105
+    },
+    {
+      "timestamp": "2026-05-12T03:15:00+07:00",
+      "trigger": "user_command_save_brain",
+      "summary": "Fix lỗi Infinite Loop của Swiper trên mobile, xử lý padding và drop-shadow cho thẻ slider.",
+      "message_count": 130
     }
   ]
 }

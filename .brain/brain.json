@@ -1,0 +1,102 @@
+{
+  "meta": {
+    "schema_version": "1.1.0",
+    "updated_at": "2026-05-12T03:15:00+07:00"
+  },
+  "project": {
+    "name": "Laboon Website (laboon.vn)",
+    "type": "WordPress + Elementor",
+    "status": "production",
+    "description": "Website thương hiệu trà sữa Laboon - milktea & coffee shop"
+  },
+  "tech_stack": {
+    "cms": "WordPress 6.9.4",
+    "page_builder": "Elementor 4.0.6",
+    "theme": "Kababi (parent) + Kababi-child",
+    "slider": "RevSlider 6.6.8",
+    "php": "PHP 7.4 (FPM) with OPcache",
+    "web_server": "Nginx with FastCGI Cache (RAM: /dev/shm/nginx-cache/wp)",
+    "compression": "Brotli level 11 + Gzip level 2",
+    "protocol": "HTTP/2",
+    "panel": "aaPanel",
+    "os": "CentOS/RHEL 7 (yum-based)"
+  },
+  "server": {
+    "ip": "116.118.48.68",
+    "ssh_port": 22,
+    "user": "root",
+    "document_root": "/www/wwwroot/laboon.vn",
+    "nginx_config": "/www/server/panel/vhost/nginx/laboon.vn.conf",
+    "error_log": "/www/wwwlogs/laboon.vn.error.log",
+    "php_path": "/www/server/php/74/bin/php"
+  },
+  "database": {
+    "name": "laboon_vn",
+    "user": "laboon_vn",
+    "prefix": "wp_"
+  },
+  "active_plugins": [
+    "advanced-custom-fields",
+    "duplicate-page",
+    "elementor",
+    "ova-events",
+    "hello",
+    "image-optimization",
+    "nginx-helper",
+    "ova-framework",
+    "google-site-kit",
+    "revslider",
+    "volpi-system",
+    "insert-headers-and-footers (WPCode)",
+    "wps-hide-login",
+    "wordpress-seo (Yoast)",
+    "autoptimize"
+  ],
+  "inactive_plugins_heavy": [
+    {"name": "woocommerce", "size": "61MB", "note": "Not activated, safe to remove if not selling online"},
+    {"name": "gt3-photo-video-gallery", "size": "4.6MB"},
+    {"name": "gt3-pagebuilder-johnblack", "size": "2.4MB"},
+    {"name": "all-in-one-wp-migration", "size": "2.5MB"},
+    {"name": "akismet", "note": "Not needed for non-blog"},
+    {"name": "mailchimp", "note": "Inactive"},
+    {"name": "instagram-feed", "note": "Inactive"},
+    {"name": "optinmonster", "note": "Inactive"},
+    {"name": "wpforms-lite", "note": "Inactive"},
+    {"name": "userfeedback-lite", "note": "Inactive"},
+    {"name": "query-monitor", "note": "Dev tool, should not be on production"}
+  ],
+  "junk_files": [
+    "/wp-content/plugins/giai-de-online.old",
+    "/wp-content/plugins/giai-de-online.zip",
+    "/wp-content/plugins/cua-hang.old"
+  ],
+  "fonts_used": [
+    {"name": "Montserrat", "role": "Primary (body, nav, buttons)", "source": "Google Fonts API"},
+    {"name": "Marmelad", "role": "Secondary (headings)", "source": "Google Fonts API"},
+    {"name": "Damion", "role": "Decorative (handwriting: 'Milktea & Coffee', 'Always Fresh')", "source": "Google Fonts API"},
+    {"name": "Roboto", "role": "Some Elementor widgets", "source": "Local (elementor/google-fonts)"},
+    {"name": "Open Sans", "role": "Footer copyright only", "source": "Local (elementor/google-fonts)"},
+    {"name": "Mukta", "role": "Minor usage", "source": "Google Fonts API"},
+    {"name": "Roboto Slab", "role": "CSS loaded but NOT used on any element", "source": "Local", "note": "Safe to remove"}
+  ],
+  "knowledge_items": {
+    "gotchas": [
+      "Adblockers block fonts loaded from /wp-content/uploads/elementor/google-fonts/ path because 'google-fonts' triggers filter rules",
+      "Elementor stores URLs with double-escaped slashes in _elementor_data: http:\\\\/\\\\/laboon.vn - need special MySQL REPLACE syntax",
+      "Deferring JS breaks Masonry/gallery layout - masonry.js, imagesloaded.js, gallery.js must NOT be deferred",
+      "Deferring swiper and elementor-frontend breaks Elementor Image Carousel initialization on mobile",
+      "Elementor Swiper height collapses if initialized while display:none (e.g., resizing window to test mobile). Always test on real device or refresh.",
+      "Nginx transparent WebP routing requires 'rewrite ... last' to correctly serve image/webp Content-Type for original JPG URLs",
+      "Performance optimizations (async CSS, defer JS) in functions.php must use is_user_logged_in() bypass to prevent breaking Admin Bar/Elementor Editor",
+      "Swiper FOUC: Trình duyệt xếp chồng các slide (display block) và hiện icon ảnh hỏng (do lazyload thiếu src) trước khi JS chạy. Giải quyết bằng cách thêm inline CSS vào wp_head để ẩn các slide (trừ cái đầu tiên) và tạo skeleton/spinner thay vì icon ảnh hỏng.",
+      "Swiper Infinite Loop with slidesPerView: auto will silently fail/disable if initialized when container width is 0 (hidden by Elementor animations). Always check offsetWidth > 0 before calling new Swiper() and use observer: true."
+    ],
+    "conventions": [
+      "Child theme: kababi-child, custom code goes in functions.php",
+      "WPCode plugin manages header/footer scripts (GTM, Zalo widget)",
+      "Autoptimize handles CSS/JS aggregation and minification",
+      "Static assets cached 30 days via nginx (max-age=2592000)",
+      "Images > 50KB are converted to WebP via cwebp bash script and served transparently by Nginx"
+    ]
+  }
+}
