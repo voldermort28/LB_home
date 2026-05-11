@@ -486,10 +486,10 @@ Text Domain:  kababi-child
     z-index: -1 !important;
     opacity: 0 !important;
     transition: opacity 0.4s ease !important;
-    /* 5-pointed star pattern SVG */
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5l3.5 10.5h11l-9 6.5 3.5 10.5-9-6.5-9 6.5 3.5-10.5-9-6.5h11z M0 35l3.5 10.5h11l-9 6.5 3.5 10.5-9-6.5-9 6.5 3.5-10.5-9-6.5h11z M60 35l3.5 10.5h11l-9 6.5 3.5 10.5-9-6.5-9 6.5 3.5-10.5-9-6.5h11z' fill='%23ffffff' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E") !important;
-    background-size: 60px 60px !important;
-    background-position: top center !important;
+    /* User custom hover background */
+    background-image: url("https://laboon.vn/wp-content/uploads/2026/05/background_hover_lite.jpg") !important;
+    background-size: cover !important;
+    background-position: center !important;
 }
 
 .ova-menu-category .menu-category:hover::after {
@@ -503,7 +503,7 @@ Text Domain:  kababi-child
     max-width: none !important;
     height: auto !important;
     display: block !important;
-    margin: -80px -10% 15px -10% !important; /* Pop out exactly outside bounds */
+    margin: -100px -10% 15px -10% !important; /* User requested precise margin */
     position: relative !important;
     z-index: 2 !important;
     filter: drop-shadow(0 20px 15px rgba(0,0,0,0.15)) !important;
