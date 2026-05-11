@@ -1,0 +1,97 @@
+{
+  "updated_at": "2026-05-11T03:00:00+07:00",
+  "working_on": {
+    "feature": "Homepage Product Grid & Banner Optimization",
+    "task": "Redesign category grid (Starbucks style) & Fix Swiper FOUC",
+    "status": "completed",
+    "files": [
+      "/wp-content/themes/kababi-child/style.css",
+      "/wp-content/themes/kababi-child/functions.php"
+    ],
+    "blockers": [],
+    "notes": "Đã hoàn thành layout ziczac thẻ bo tròn Starbucks, hiệu ứng hover phóng to, đổi màu và thêm hoa văn ngôi sao. Xử lý triệt để lỗi FOUC (chớp icon ảnh lỗi) bằng skeleton loader và spinner."
+  },
+  "summary": {
+    "project": "Laboon Website (laboon.vn)",
+    "current_feature": "Homepage Enhancements",
+    "current_task": "Đã hoàn tất UI Categories & Banner Loading",
+    "status": "idle",
+    "progress_percent": 100,
+    "last_action": "Khắc phục lỗi chồng 5 khung spinner trước khi Swiper init.",
+    "next_step": "Chờ yêu cầu tính năng tiếp theo hoặc nâng cấp PHP 8.1+."
+  },
+  "pending_tasks": [
+    {
+      "task": "Áp dụng shortcode [laboon_stores] vào trang Cửa Hàng chính",
+      "priority": "high",
+      "notes": "Chờ user xác nhận UI trên trang test."
+    },
+    {
+      "task": "Nâng cấp PHP 7.4 → 8.1+",
+      "priority": "medium",
+      "notes": "Thực hiện sau khi giao diện đã ổn định hoàn toàn."
+    },
+    {
+      "task": "Setup Cloudflare CDN",
+      "priority": "medium",
+      "notes": "Reduce TTFB cho khách truy cập ở xa."
+    }
+  ],
+  "recent_changes": [
+    {
+      "timestamp": "2026-05-11T02:30:00+07:00",
+      "type": "feature",
+      "description": "Cập nhật thiết kế danh mục sản phẩm (Product Category) trên trang chủ theo style Starbucks: thẻ thuôn dài, pop-out ly nước, hover phóng to, nền xanh và hoa văn ngôi sao 5 cánh.",
+      "location": "style.css"
+    },
+    {
+      "timestamp": "2026-05-11T02:50:00+07:00",
+      "type": "bugfix",
+      "description": "Sửa lỗi FOUC chớp icon ảnh hỏng của Swiper Banner do cơ chế Lazy Load. Thay thế bằng hiệu ứng vòng xoay (Spinner) và Skeleton UI.",
+      "location": "functions.php"
+    },
+    {
+      "timestamp": "2026-05-11T02:55:00+07:00",
+      "type": "bugfix",
+      "description": "Fix lỗi xếp chồng 5 khung loading spinner trước khi Swiper script chạy bằng cách ẩn tất cả slide ngoại trừ first-child.",
+      "location": "functions.php"
+    },
+    {
+      "timestamp": "2026-05-12T02:00:00+07:00",
+      "type": "bugfix",
+      "description": "Tinh chỉnh lại toạ độ ly nước trên Desktop (-100px -10%) và fix triệt để lỗi thẻ bị cắt góc (overflow: hidden -> visible). Thay thế hình nền hover bằng ảnh tĩnh background_hover_lite.jpg.",
+      "location": "style.css"
+    }
+  ],
+  "errors_encountered": [
+    {
+      "error": "Lỗi sshpass permission do thiếu HostKeyChecking khi SCP",
+      "solution": "Thêm cờ -o StrictHostKeyChecking=no vào lệnh ssh/scp.",
+      "resolved": true
+    },
+    {
+      "error": "FOUC (Flash of Unstyled Content) Swiper banner hiện 5 broken image icon khi lazy load",
+      "solution": "Thêm CSS inline vào thẻ <head> ẩn img[data-src]:not([src]) và hiển thị skeleton loader.",
+      "resolved": true
+    },
+    {
+      "error": "Lỗi 5 skeleton loader xếp chồng lên nhau do Swiper chưa initialize",
+      "solution": "Thêm CSS ẩn tất cả các slide (display: none) trừ slide đầu tiên (first-child) khi Swiper chưa có class swiper-initialized.",
+      "resolved": true
+    }
+  ],
+  "context_checkpoints": [
+    {
+      "timestamp": "2026-05-11T03:00:00+07:00",
+      "trigger": "user_command_save_brain",
+      "summary": "Hoàn thiện UI danh mục Starbucks style & Fix FOUC Swiper slider.",
+      "message_count": 92
+    },
+    {
+      "timestamp": "2026-05-12T02:10:00+07:00",
+      "trigger": "user_command_save_brain",
+      "summary": "Fix lỗi overflow CSS, tinh chỉnh toạ độ ly nước chính xác và thay hình nền background_hover_lite.jpg.",
+      "message_count": 105
+    }
+  ]
+}
