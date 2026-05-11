@@ -476,7 +476,9 @@ function laboon_mobile_category_slider() {
                             centeredSlides: true,
                             slidesPerView: 'auto',
                             loop: true,
-                            loopedSlides: 6, // Fix loop blank spaces
+                            loopedSlides: categories.length,
+                            observer: true,
+                            observeParents: true,
                             coverflowEffect: {
                                 rotate: 0,
                                 stretch: 0, // 0 stretch + depth automatically creates the ~10% overlap nicely
