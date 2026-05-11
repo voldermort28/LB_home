@@ -526,7 +526,7 @@ Text Domain:  kababi-child
 @media (max-width: 1024px) {
     .laboon-mobile-cat-slider {
         width: 100%;
-        padding-top: 130px !important; /* Space for popout */
+        padding-top: 180px !important; /* Space for popout */
         padding-bottom: 60px !important; /* Space for pagination */
         overflow: hidden !important;
     }

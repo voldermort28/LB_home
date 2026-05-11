@@ -440,18 +440,12 @@ function laboon_mobile_category_slider() {
                 var swiperWrapper = document.createElement('div');
                 swiperWrapper.className = 'swiper-wrapper';
 
-                var timesToDuplicate = 1;
-                if (categories.length <= 5) timesToDuplicate = 3;
-                else if (categories.length <= 8) timesToDuplicate = 2;
-
-                for (var i = 0; i < timesToDuplicate; i++) {
-                    categories.forEach(function(cat) {
-                        var slide = document.createElement('div');
-                        slide.className = 'swiper-slide';
-                        slide.appendChild(i === 0 ? cat : cat.cloneNode(true));
-                        swiperWrapper.appendChild(slide);
-                    });
-                }
+                categories.forEach(function(cat) {
+                    var slide = document.createElement('div');
+                    slide.className = 'swiper-slide';
+                    slide.appendChild(cat);
+                    swiperWrapper.appendChild(slide);
+                });
 
                 swiperContainer.appendChild(swiperWrapper);
 
@@ -482,7 +476,7 @@ function laboon_mobile_category_slider() {
                             centeredSlides: true,
                             slidesPerView: 'auto',
                             loop: true,
-                            loopedSlides: categories.length, // Match original length
+                            loopedSlides: 6, // Fix loop blank spaces
                             coverflowEffect: {
                                 rotate: 0,
                                 stretch: 0, // 0 stretch + depth automatically creates the ~10% overlap nicely
