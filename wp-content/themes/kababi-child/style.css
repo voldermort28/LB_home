@@ -448,7 +448,8 @@ Text Domain:  kababi-child
     overflow: visible !important; /* THE MOST IMPORTANT RULE TO ALLOW CUP TO POP OUT */
 }
 
-.ova-menu-category .menu-category:hover {
+.ova-menu-category .menu-category:hover,
+.swiper-slide-active .ova-menu-category .menu-category {
     transform: scale(1.15) translateY(-10px) !important;
     z-index: 100 !important; /* Bring to front */
     border-radius: 20px !important; /* Force retain radius */
@@ -467,12 +468,14 @@ Text Domain:  kababi-child
 }
 
 /* Hover State - Background Color & Scale */
-.ova-menu-category .menu-category:hover {
+.ova-menu-category .menu-category:hover,
+.swiper-slide-active .ova-menu-category .menu-category {
     transform: scale(1.15) translateY(-10px) !important;
     z-index: 100 !important; /* Bring to front */
 }
 
-.ova-menu-category .menu-category:hover::before {
+.ova-menu-category .menu-category:hover::before,
+.swiper-slide-active .ova-menu-category .menu-category::before {
     background-color: #046181 !important; /* Laboon Blue */
     box-shadow: 0 30px 50px rgba(4,97,129,0.3) !important;
 }
@@ -492,7 +495,8 @@ Text Domain:  kababi-child
     background-position: center !important;
 }
 
-.ova-menu-category .menu-category:hover::after {
+.ova-menu-category .menu-category:hover::after,
+.swiper-slide-active .ova-menu-category .menu-category::after {
     opacity: 1 !important;
     border-radius: 20px !important;
 }
@@ -510,9 +514,51 @@ Text Domain:  kababi-child
     transition: transform 0.4s ease, filter 0.4s ease !important;
 }
 
-.ova-menu-category .menu-category:hover img {
+.ova-menu-category .menu-category:hover img,
+.swiper-slide-active .ova-menu-category .menu-category img {
     transform: translateY(-15px) scale(1.1) !important; /* Fly higher on hover */
     filter: drop-shadow(0 30px 25px rgba(0,0,0,0.3)) !important;
+}
+
+/* ==========================================================================
+   MOBILE CATEGORY SLIDER (STARBUCKS COVERFLOW)
+   ========================================================================== */
+@media (max-width: 1024px) {
+    .laboon-mobile-cat-slider {
+        width: 100%;
+        padding-top: 130px !important; /* Space for popout */
+        padding-bottom: 60px !important; /* Space for pagination */
+        overflow: hidden !important;
+    }
+    
+    .laboon-mobile-cat-slider .swiper-slide {
+        width: 60% !important; /* Center slide width, side slides peek out */
+        opacity: 0.5; /* Dim non-active slides */
+        transition: opacity 0.4s ease;
+    }
+
+    .laboon-mobile-cat-slider .swiper-slide-active {
+        opacity: 1; /* Center slide full visibility */
+    }
+
+    .laboon-mobile-cat-slider .ova-menu-category {
+        padding-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* Adjust Navigation Arrows & Pagination */
+    .laboon-mobile-cat-slider .swiper-button-next,
+    .laboon-mobile-cat-slider .swiper-button-prev {
+        color: #046181 !important;
+        transform: scale(0.6);
+        top: 60%;
+    }
+    .laboon-mobile-cat-slider .swiper-pagination {
+        bottom: 0 !important;
+    }
+    .laboon-mobile-cat-slider .swiper-pagination-bullet-active {
+        background: #046181 !important;
+    }
 }
 
 /* Title text */

@@ -415,3 +415,89 @@ function laboon_custom_posts_per_page( $query ) {
         $query->set( 'posts_per_page', 9 );
     }
 }
+
+/**
+ * Convert Elementor Category Grid to Swiper Slider on Mobile/Tablet
+ */
+add_action( 'wp_footer', 'laboon_mobile_category_slider', 99 );
+function laboon_mobile_category_slider() {
+    if ( is_front_page() ) {
+        ?>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.innerWidth <= 1024) {
+                var section = document.querySelector('.elementor-element-eafa95b .elementor-container');
+                if (!section) return;
+
+                var categories = section.querySelectorAll('.elementor-widget-kababi_elementor_menu-category');
+                if (categories.length === 0) return;
+
+                // Create Swiper structure
+                var swiperContainer = document.createElement('div');
+                swiperContainer.className = 'swiper laboon-mobile-cat-slider'; 
+                swiperContainer.classList.add('swiper-container'); // For backward compatibility with older elementor swiper
+
+                var swiperWrapper = document.createElement('div');
+                swiperWrapper.className = 'swiper-wrapper';
+
+                categories.forEach(function(cat) {
+                    var slide = document.createElement('div');
+                    slide.className = 'swiper-slide';
+                    slide.appendChild(cat);
+                    swiperWrapper.appendChild(slide);
+                });
+
+                swiperContainer.appendChild(swiperWrapper);
+
+                // Add pagination & navigation
+                var pagination = document.createElement('div');
+                pagination.className = 'swiper-pagination';
+                swiperContainer.appendChild(pagination);
+
+                var prevBtn = document.createElement('div');
+                prevBtn.className = 'swiper-button-prev';
+                swiperContainer.appendChild(prevBtn);
+
+                var nextBtn = document.createElement('div');
+                nextBtn.className = 'swiper-button-next';
+                swiperContainer.appendChild(nextBtn);
+
+                // Replace the old columns with the new slider
+                section.innerHTML = '';
+                section.appendChild(swiperContainer);
+
+                // Init Swiper after making sure it's loaded by Elementor
+                var initSlider = setInterval(function() {
+                    if (typeof Swiper !== 'undefined') {
+                        clearInterval(initSlider);
+                        new Swiper('.laboon-mobile-cat-slider', {
+                            effect: 'coverflow',
+                            grabCursor: true,
+                            centeredSlides: true,
+                            slidesPerView: 'auto',
+                            loop: true,
+                            coverflowEffect: {
+                                rotate: 0,
+                                stretch: -30, // Pulls side slides slightly under the center slide
+                                depth: 100, // Scales down the side slides
+                                modifier: 1,
+                                slideShadows: false,
+                            },
+                            pagination: {
+                                el: '.swiper-pagination',
+                                clickable: true,
+                            },
+                            navigation: {
+                                nextEl: '.swiper-button-next',
+                                prevEl: '.swiper-button-prev',
+                            },
+                        });
+                    }
+                }, 100);
+            }
+        });
+        </script>
+        <?php
+    }
+}
+
