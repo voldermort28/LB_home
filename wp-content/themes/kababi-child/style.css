@@ -4,7 +4,7 @@ Description: This is child theme of kababi
 Author: Ovatheme
 Author URI: https://themeforest.net/user/ovatheme
 Template: kababi
-Version: 1.0.4
+Version: 1.0.5
 Tags: two-columns, three-columns, left-sidebar, right-sidebar, custom-menu, editor-style, featured-images, flexible-header, full-width-template, post-formats, rtl-language-support, sticky-post, translation-ready
 Text Domain:  kababi-child
 */
@@ -421,12 +421,15 @@ Text Domain:  kababi-child
    ========================================================================== */
 .ova-menu-category {
     margin-bottom: 60px !important; /* Extra bottom margin for hover scaling */
-    padding-top: 130px !important; /* Space for the 2x larger overflowing image */
+    padding-top: 100px !important; /* Space for the overflowing image */
+    overflow: visible !important; /* FORCE VISIBLE FOR POP OUT */
 }
 
 /* Force overflow visible on elementor wrappers to prevent clipping bottom corners */
 .elementor-widget-kababi_elementor_menu-category,
-.elementor-widget-kababi_elementor_menu-category .elementor-widget-container {
+.elementor-widget-kababi_elementor_menu-category .elementor-widget-container,
+.elementor-widget-kababi_elementor_menu-category .elementor-widget-wrap,
+.elementor-column-wrap {
     overflow: visible !important;
 }
 
@@ -437,11 +440,18 @@ Text Domain:  kababi-child
     border-radius: 20px !important; /* Reduced by 50% */
     padding: 0 15px 30px 15px !important;
     text-align: center !important; /* Centered text */
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-radius 0.4s ease !important;
     z-index: 1 !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
+    overflow: visible !important; /* THE MOST IMPORTANT RULE TO ALLOW CUP TO POP OUT */
+}
+
+.ova-menu-category .menu-category:hover {
+    transform: scale(1.15) translateY(-10px) !important;
+    z-index: 100 !important; /* Bring to front */
+    border-radius: 20px !important; /* Force retain radius */
 }
 
 /* Background Color Layer */
@@ -484,15 +494,16 @@ Text Domain:  kababi-child
 
 .ova-menu-category .menu-category:hover::after {
     opacity: 1 !important;
+    border-radius: 20px !important;
 }
 
 /* Cup Image */
 .ova-menu-category .menu-category img {
-    width: 160% !important; /* 2x larger */
+    width: 120% !important; /* Reduced 20% from 160%, slightly wider than card */
     max-width: none !important;
     height: auto !important;
     display: block !important;
-    margin: -130px -30% 15px -30% !important; /* Pop out massively, perfectly centered */
+    margin: -80px -10% 15px -10% !important; /* Pop out exactly outside bounds */
     position: relative !important;
     z-index: 2 !important;
     filter: drop-shadow(0 20px 15px rgba(0,0,0,0.15)) !important;
@@ -500,7 +511,7 @@ Text Domain:  kababi-child
 }
 
 .ova-menu-category .menu-category:hover img {
-    transform: translateY(-20px) scale(1.15) !important; /* Fly higher on hover */
+    transform: translateY(-15px) scale(1.1) !important; /* Fly higher on hover */
     filter: drop-shadow(0 30px 25px rgba(0,0,0,0.3)) !important;
 }
 
