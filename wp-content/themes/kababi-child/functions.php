@@ -466,9 +466,9 @@ function laboon_mobile_category_slider() {
                 section.innerHTML = '';
                 section.appendChild(swiperContainer);
 
-                // Init Swiper after making sure it's loaded by Elementor
+                // Init Swiper after making sure it's loaded by Elementor AND container has width
                 var initSlider = setInterval(function() {
-                    if (typeof Swiper !== 'undefined') {
+                    if (typeof Swiper !== 'undefined' && swiperContainer.offsetWidth > 0) {
                         clearInterval(initSlider);
                         new Swiper('.laboon-mobile-cat-slider', {
                             effect: 'coverflow',
@@ -477,6 +477,8 @@ function laboon_mobile_category_slider() {
                             slidesPerView: 'auto',
                             loop: true,
                             loopedSlides: categories.length,
+                            loopAdditionalSlides: categories.length, // Ensure extra clones for safety
+                            watchSlidesProgress: true, // Fix visibility tracking
                             observer: true,
                             observeParents: true,
                             coverflowEffect: {
