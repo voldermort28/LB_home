@@ -11,18 +11,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 function laboon_store_locator_shortcode() {
     // Store Data Array
     $stores = [
-        'quan-3' => [
-            'id' => 'quan-3',
-            'tab_label' => 'Quận 3',
-            'name' => '92 CAO THẮNG',
-            'address' => '92B Cao Thắng, Phường 4, Quận 3, TP. Hồ Chí Minh',
-            'hours' => '8:00 - 22:30',
+        'quan-1' => [
+            'id' => 'quan-1',
+            'tab_label' => 'Quận 1',
+            'name' => '233/3 NGUYỄN TRÃI',
+            'address' => '233/3 Nguyễn Trãi, Phường Cầu Ông Lãnh, Quận 1, TP. Hồ Chí Minh',
+            'hours' => '8:00 - 22:00',
             'hotline' => '0962463086',
             'image' => 'https://laboon.vn/wp-content/uploads/2025/06/SHOP3_Artboard-1@2x_1.webp',
             'links' => [
-                'grab' => '#',
-                'shopee' => '#',
-                'be' => '#',
+                'grab' => 'https://r.grab.com/o/MbiAFbA3',
+                'shopee' => 'https://shopeefood.vn/ho-chi-minh/laboon-tra-sua-cafe-cao-thang',
+                'be' => 'https://food.be.com.vn/resto?id=115460',
                 'website' => 'https://order.ipos.vn/menu?pos_parent=BRAND-QH7Z&pos_id=117986'
             ]
         ],

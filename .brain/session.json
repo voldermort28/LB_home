@@ -1,24 +1,24 @@
 {
-  "updated_at": "2026-05-12T03:15:00+07:00",
+  "updated_at": "2026-10-12T00:30:00+07:00",
   "working_on": {
-    "feature": "Homepage Product Grid & Banner Optimization",
-    "task": "Redesign category grid (Starbucks style) & Fix Swiper FOUC",
+    "feature": "SEO Optimization & Store Location Updates",
+    "task": "Update Branch Info: District 3 (Cao Thang) -> District 1 (Nguyen Trai)",
     "status": "completed",
     "files": [
-      "/wp-content/themes/kababi-child/style.css",
-      "/wp-content/themes/kababi-child/functions.php"
+      "/wp-content/themes/kababi-child/functions.php",
+      "/wp-content/themes/kababi-child/includes/shortcode-stores.php"
     ],
     "blockers": [],
-    "notes": "Đã hoàn thành layout ziczac thẻ bo tròn Starbucks, hiệu ứng hover phóng to, đổi màu và thêm hoa văn ngôi sao. Xử lý triệt để lỗi FOUC (chớp icon ảnh lỗi) bằng skeleton loader và spinner."
+    "notes": "Đã cập nhật toàn bộ thông tin chi nhánh Quận 3 (92B Cao Thắng) sang Quận 1 (233/3 Nguyễn Trãi, Phường Cầu Ông Lãnh, Quận 1): Chân trang Footer (Template 6344), Schema CafeOrCoffeeShop, Meta Description trang Cửa hàng, và mã nguồn shortcode-stores.php. Giữ nguyên 100% bài viết tin tức /khai-truong-chi-nhanh-3-cao-thang/ theo đúng yêu cầu."
   },
   "summary": {
     "project": "Laboon Website (laboon.vn)",
-    "current_feature": "Homepage Enhancements",
-    "current_task": "Đã hoàn tất UI Categories & Banner Loading",
+    "current_feature": "Store Info Update",
+    "current_task": "Đã chuyển đổi hoàn tất thông tin Quận 3 sang Quận 1",
     "status": "idle",
     "progress_percent": 100,
-    "last_action": "Khắc phục lỗi chồng 5 khung spinner trước khi Swiper init.",
-    "next_step": "Chờ yêu cầu tính năng tiếp theo hoặc nâng cấp PHP 8.1+."
+    "last_action": "Kiểm thử live thành công: Footer toàn web, Schema, và trang Cửa hàng đã hiển thị 233/3 Nguyễn Trãi Quận 1.",
+    "next_step": "Thêm bản ghi CNAME www trên Mắt Bão và cập nhật SSL cho www."
   },
   "pending_tasks": [
     {

@@ -1,0 +1,13 @@
+# Backup files & archives (prevents GitHub 100MB limit & data leak)
+.backup*
+*.tar.gz
+*.sql.gz
+*.sql
+
+# Scratch HTML & root configs
+.brain/*.html
+/laboon.vn.conf
+
+# OS metadata
+.DS_Store
+Thumbs.db

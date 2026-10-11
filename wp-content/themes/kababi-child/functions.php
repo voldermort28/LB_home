@@ -199,6 +199,12 @@ function kababi_child_apply_lazy_images( $html ) {
     while ( $processor->next_tag( 'img' ) ) {
         $image_index++;
 
+        // Add missing or empty alt attribute for Google Image SEO
+        $alt = $processor->get_attribute( 'alt' );
+        if ( null === $alt || '' === trim( (string) $alt ) ) {
+            $processor->set_attribute( 'alt', 'Trà Sữa Laboon' );
+        }
+
         if ( ! kababi_child_should_lazy_load_image( $processor, $image_index, $eager_image_skip ) ) {
             continue;
         }
@@ -406,6 +412,9 @@ function kababi_child_dequeue_unused_fonts() {
 // Include custom shortcodes
 require_once get_stylesheet_directory() . '/includes/shortcode-stores.php';
 
+// Include Mobile Sticky Conversion Bar (Strategy 04: Mobile CRO)
+require_once get_stylesheet_directory() . '/includes/mobile-cta-bar.php';
+
 /**
  * Custom Posts Per Page for Blog/Archive
  */
@@ -505,4 +514,179 @@ function laboon_mobile_category_slider() {
         <?php
     }
 }
+
+/**
+ * =========================================================================
+ * Phase SEO: Comprehensive SEO Enhancements for Laboon
+ * =========================================================================
+ */
+
+// 1. Exclude internal template post types from Yoast SEO XML Sitemap
+add_filter( 'wpseo_sitemap_exclude_post_type', 'laboon_seo_exclude_post_types_from_sitemap', 10, 2 );
+function laboon_seo_exclude_post_types_from_sitemap( $exclude, $post_type ) {
+    $excluded_types = array(
+        'ova_framework_hf_el',
+        'elementor_library',
+        'event',
+    );
+    if ( in_array( $post_type, $excluded_types, true ) ) {
+        return true;
+    }
+    return $exclude;
+}
+
+// 2. Set OpenGraph locale to Vietnamese vi_VN
+add_filter( 'wpseo_locale', function( $locale ) {
+    return 'vi_VN';
+} );
+
+// 3. Optimized SEO Title fallbacks
+add_filter( 'wpseo_title', 'laboon_seo_optimized_titles' );
+function laboon_seo_optimized_titles( $title ) {
+    if ( is_front_page() ) {
+        return 'Trà Sữa Laboon - Trà Sữa Pha Máy Đậm Vị & Cà Phê TP.HCM';
+    }
+    if ( is_page( 'menu' ) || is_page( 6286 ) ) {
+        return 'Menu Trà Sữa & Cà Phê Laboon | Đặt Món Online';
+    }
+    if ( is_page( 'cua-hang' ) || is_page( 1642 ) ) {
+        return 'Hệ Thống Chi Nhánh Cửa Hàng - Trà Sữa Laboon TP.HCM';
+    }
+    if ( is_page( 'tin-tuc' ) || is_home() || is_page( 44 ) ) {
+        return 'Tin Tức & Khuyến Mãi - Trà Sữa Laboon';
+    }
+    return $title;
+}
+
+// 4. Optimized Meta Description fallbacks for pages with empty description
+add_filter( 'wpseo_metadesc', 'laboon_seo_optimized_descriptions' );
+function laboon_seo_optimized_descriptions( $desc ) {
+    if ( ! empty( $desc ) ) {
+        return $desc;
+    }
+    if ( is_page( 'menu' ) || is_page( 6286 ) ) {
+        return 'Khám phá Menu Trà Sữa Laboon: Trà sữa kem trứng khè, trà Oolong sen vàng macchiato, cà phê muối, trà trái cây tươi mát. Giao hàng tận nơi nhanh chóng!';
+    }
+    if ( is_page( 'cua-hang' ) || is_page( 1642 ) ) {
+        return 'Hệ thống cửa hàng Trà Sữa Laboon tại TP.HCM: Quận 1, Quận 4, Quận 7. Xem địa chỉ, chỉ đường, số điện thoại hotline và giờ mở cửa chi tiết.';
+    }
+    if ( is_page( 'tin-tuc' ) || is_home() || is_page( 44 ) ) {
+        return 'Tin tức mới nhất, chương trình khuyến mãi và các món mới từ Trà Sữa Laboon. Cập nhật các ưu đãi độc quyền dành cho khách hàng.';
+    }
+    return $desc;
+}
+
+// 5. Inject SEO H1 on Homepage
+add_action( 'wp_body_open', 'laboon_seo_homepage_h1', 1 );
+function laboon_seo_homepage_h1() {
+    if ( is_front_page() ) {
+        echo '<h1 class="screen-reader-text" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Trà Sữa Laboon - Trà Sữa Pha Máy &amp; Trà Trái Cây Tươi Ngon TP.HCM</h1>' . "\n";
+    }
+}
+
+// 6. LocalBusiness / CafeOrCoffeeShop Schema JSON-LD for All 3 Branches
+add_action( 'wp_head', 'laboon_seo_local_business_schema', 1 );
+function laboon_seo_local_business_schema() {
+    if ( ! is_front_page() && ! is_page( 'cua-hang' ) && ! is_singular( 'store' ) ) {
+        return;
+    }
+
+    $schema = array(
+        '@context'      => 'https://schema.org',
+        '@type'         => 'CafeOrCoffeeShop',
+        '@id'           => 'https://laboon.vn/#organization',
+        'name'          => 'Trà Sữa Laboon',
+        'url'           => 'https://laboon.vn',
+        'logo'          => 'https://laboon.vn/wp-content/uploads/2025/07/cropped-favicon_2_Artboard-11-192x192.webp',
+        'image'         => 'https://laboon.vn/wp-content/uploads/2025/06/thumbnail_Artboard-1@2x_1.png',
+        'description'   => 'Trà Sữa Laboon chuyên Trà Sữa pha máy đậm vị, trà trái cây tươi ngon và cà phê chất lượng cao.',
+        'telephone'     => '0962463086',
+        'email'         => 'contact@laboon.vn',
+        'priceRange'    => '25.000đ - 65.000đ',
+        'servesCuisine' => array( 'Milk Tea', 'Fruit Tea', 'Coffee', 'Beverages' ),
+        'hasMenu'       => 'https://laboon.vn/menu/',
+        'sameAs'        => array(
+            'https://www.facebook.com/trasualaboon',
+        ),
+        'department'    => array(
+            array(
+                '@type'                     => 'CafeOrCoffeeShop',
+                'name'                      => 'Trà Sữa Laboon - Chi nhánh Quận 1 (233/3 Nguyễn Trãi)',
+                'address'                   => array(
+                    '@type'           => 'PostalAddress',
+                    'streetAddress'   => '233/3 Nguyễn Trãi, Phường Cầu Ông Lãnh',
+                    'addressLocality' => 'Quận 1',
+                    'addressRegion'   => 'TP. Hồ Chí Minh',
+                    'addressCountry'  => 'VN',
+                ),
+                'telephone'                 => '0962463086',
+                'openingHoursSpecification' => array(
+                    '@type'     => 'OpeningHoursSpecification',
+                    'dayOfWeek' => array( 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ),
+                    'opens'     => '08:00',
+                    'closes'    => '22:00',
+                ),
+            ),
+            array(
+                '@type'                     => 'CafeOrCoffeeShop',
+                'name'                      => 'Trà Sữa Laboon - Chi nhánh Quận 4 (246 Khánh Hội)',
+                'address'                   => array(
+                    '@type'           => 'PostalAddress',
+                    'streetAddress'   => '246 Khánh Hội, Phường 6',
+                    'addressLocality' => 'Quận 4',
+                    'addressRegion'   => 'TP. Hồ Chí Minh',
+                    'addressCountry'  => 'VN',
+                ),
+                'telephone'                 => '0962463086',
+                'openingHoursSpecification' => array(
+                    '@type'     => 'OpeningHoursSpecification',
+                    'dayOfWeek' => array( 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ),
+                    'opens'     => '08:00',
+                    'closes'    => '22:30',
+                ),
+            ),
+            array(
+                '@type'                     => 'CafeOrCoffeeShop',
+                'name'                      => 'Trà Sữa Laboon - Chi nhánh Quận 7 (79 Đường số 17)',
+                'address'                   => array(
+                    '@type'           => 'PostalAddress',
+                    'streetAddress'   => '79 Đường số 17, Phường Tân Quy',
+                    'addressLocality' => 'Quận 7',
+                    'addressRegion'   => 'TP. Hồ Chí Minh',
+                    'addressCountry'  => 'VN',
+                ),
+                'telephone'                 => '0962463086',
+                'openingHoursSpecification' => array(
+                    '@type'     => 'OpeningHoursSpecification',
+                    'dayOfWeek' => array( 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ),
+                    'opens'     => '08:00',
+                    'closes'    => '22:30',
+                ),
+            ),
+        ),
+    );
+
+    echo '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
+}
+
+/**
+ * Exclude logged-in users / Admins from GTM & WPCode analytics tracking
+ */
+add_filter( 'disable_ihaf_header', 'laboon_disable_tracking_for_logged_in_users' );
+add_filter( 'disable_ihaf_body', 'laboon_disable_tracking_for_logged_in_users' );
+function laboon_disable_tracking_for_logged_in_users( $disable ) {
+    if ( is_user_logged_in() ) {
+        return true;
+    }
+    return $disable;
+}
+
+add_filter( 'wpcode_snippet_output', function( $snippet_code, $snippet ) {
+    if ( is_user_logged_in() ) {
+        if ( is_string( $snippet_code ) && ( false !== stripos( $snippet_code, 'googletagmanager.com' ) || false !== stripos( $snippet_code, 'gtag(' ) ) ) {
+            return '';
+        }
+    }
+    return $snippet_code;
+}, 10, 2 );
 
