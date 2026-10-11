@@ -158,7 +158,7 @@ function laboon_render_mobile_cta_bar() {
                                 </div>
                                 <div class="lmb-opt-info">
                                     <div class="lmb-branch-top-line">
-                                        <strong>Chi nhánh Quận 1</strong>
+                                        <strong>Quận 1</strong>
                                         <span class="lmb-branch-tag">08:00 - 22:00</span>
                                     </div>
                                     <span class="lmb-branch-addr">233/3 Nguyễn Trãi, P. Cầu Ông Lãnh, Q.1</span>
@@ -173,7 +173,7 @@ function laboon_render_mobile_cta_bar() {
                                 </div>
                                 <div class="lmb-opt-info">
                                     <div class="lmb-branch-top-line">
-                                        <strong>Chi nhánh Quận 4</strong>
+                                        <strong>Quận 4</strong>
                                         <span class="lmb-branch-tag">08:00 - 22:30</span>
                                     </div>
                                     <span class="lmb-branch-addr">246 Khánh Hội, Phường 6, Q.4</span>
@@ -188,7 +188,7 @@ function laboon_render_mobile_cta_bar() {
                                 </div>
                                 <div class="lmb-opt-info">
                                     <div class="lmb-branch-top-line">
-                                        <strong>Chi nhánh Quận 7</strong>
+                                        <strong>Quận 7</strong>
                                         <span class="lmb-branch-tag">08:00 - 22:30</span>
                                     </div>
                                     <span class="lmb-branch-addr">79 Đường số 17, P. Tân Quy, Q.7</span>
@@ -602,9 +602,12 @@ function laboon_render_mobile_cta_bar() {
             margin-bottom: 3px;
         }
         .lmb-branch-top-line strong {
-            font-size: 14px;
+            font-size: 15px;
             color: #0f172a;
             font-weight: 800;
+            white-space: nowrap;
+            overflow: visible;
+            text-overflow: clip;
         }
         .lmb-branch-tag {
             font-size: 10px;
