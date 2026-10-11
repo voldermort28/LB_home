@@ -271,7 +271,7 @@ function kababi_child_defer_non_critical_scripts( $html ) {
         . 's.src="https://sp.zalo.me/plugins/sdk.js";document.body.appendChild(s);}'
         . '}["scroll","mousemove","touchstart","click","keydown"].forEach(function(e){'
         . 'window.addEventListener(e,l,{once:!0,passive:!0})});'
-        . 'window.addEventListener("load",function(){setTimeout(l,4000)});})()';
+        . 'window.addEventListener("load",function(){setTimeout(l,4000)});})()</script>';
 
     return str_replace( $zalo_original, $zalo_lazy, $html );
 }
@@ -293,6 +293,8 @@ function kababi_child_selective_defer_scripts( $tag, $handle, $src ) {
         'tp-tools',
         'revmin',
         'swiper',
+        'elementor-webpack-runtime',
+        'elementor-frontend-modules',
         'elementor-frontend',
     );
 
