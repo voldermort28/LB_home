@@ -266,12 +266,56 @@ function kababi_child_add_font_display_swap( $html ) {
 
 function kababi_child_defer_non_critical_scripts( $html ) {
     $zalo_original = '<script src="https://sp.zalo.me/plugins/sdk.js"></script>';
-    $zalo_lazy     = '<script id="laboon-zalo-lazy">'
-        . '(function(){var d=!1;function l(){if(!d){d=!0;var s=document.createElement("script");'
-        . 's.src="https://sp.zalo.me/plugins/sdk.js";document.body.appendChild(s);}'
-        . '}["scroll","mousemove","touchstart","click","keydown"].forEach(function(e){'
-        . 'window.addEventListener(e,l,{once:!0,passive:!0})});'
-        . 'window.addEventListener("load",function(){setTimeout(l,4000)});})()</script>';
+    
+    // Placeholder button: visually identical to Zalo button, 0 JS/network overhead on page load.
+    // Loads the full SDK immediately upon click, or in background after window 'load' + idle.
+    $zalo_placeholder = '<div id="laboon-zalo-placeholder" class="laboon-zalo-placeholder" title="Chat Zalo với Trà Sữa Laboon" aria-label="Chat Zalo" role="button" tabindex="0">'
+        . '<svg viewBox="0 0 50 50" width="56" height="56">'
+        . '<path fill="#0068FF" d="M22.78 0.17h4.42c6.07 0 9.61.89 12.76 2.58 3.15 1.69 5.63 4.15 7.3 7.3 1.69 3.15 2.58 6.69 2.58 12.76v4.4c0 6.07-.89 9.61-2.58 12.76-1.69 3.15-4.15 5.63-7.3 7.3-3.15 1.69-6.69 2.58-12.76 2.58h-4.4c-6.07 0-9.61-.89-12.76-2.58-3.15-1.69-5.63-4.15-7.3-7.3-1.69-3.15-2.58-6.69-2.58-12.76v-4.4c0-6.07.89-9.61 2.58-12.76 1.69-3.15 4.15-5.63 7.3-7.3C13.17 1.06 16.73.17 22.78.17z"/>'
+        . '<path fill="#fff" d="M7.78 43.59c2.32.26 5.23-.4 7.29-1.4 8.95 4.95 22.95 4.71 31.42-.71.33-.49.64-1 .92-1.53 1.69-3.16 2.59-6.72 2.59-12.81v-4.41c0-6.09-.9-9.65-2.59-12.81-1.67-3.16-4.17-5.63-7.33-7.32C36.93.9 33.37 0 27.28 0h-4.43c-5.19 0-8.55.65-11.38 1.9-.15.14-.3.28-.45.42-8.3 8-8.93 25.34-1.89 34.76.01.01.02.03.03.04 1.08 1.6.04 4.4-1.6 6.03-.26.25-.17.4.23.44z"/>'
+        . '<path fill="#0068FF" d="M20.56 17h-9.72v2.09h6.75l-6.65 8.24c-.21.31-.36.59-.36 1.24v.53h9.17c.46 0 .84-.38.84-.83v-1.12h-7.09l6.25-7.85c.1-.11.27-.32.34-.42l.04-.06c.36-.53.44-.98.44-1.53V17zm12.38 12.09h1.38V17h-2.08v11.39c0 .38.3.7.7.7zm-7.13-9.4c-2.61 0-4.74 2.12-4.74 4.74s2.12 4.74 4.74 4.74 4.74-2.12 4.74-4.74c.02-2.62-2.11-4.74-4.74-4.74zm0 7.53c-1.54 0-2.79-1.25-2.79-2.79s1.25-2.79 2.79-2.79 2.79 1.25 2.79 2.79-1.23 2.79-2.79 2.79zm14.67-7.6c-2.63 0-4.78 2.14-4.78 4.78s2.14 4.78 4.78 4.78 4.78-2.14 4.78-4.78-2.14-4.78-4.78-4.78zm0 7.6c-1.55 0-2.8-1.25-2.8-2.8s1.25-2.8 2.8-2.8 2.8 1.25 2.8 2.8-1.25 2.8-2.8 2.8zm-11.03 1.88h1.12V19.96h-1.95v8.32c0 .44.38.82.83.82z"/>'
+        . '</svg>'
+        . '</div>'
+        . '<style>'
+        . '.laboon-zalo-placeholder{position:fixed;bottom:24px;right:24px;z-index:9999;width:56px;height:56px;cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,104,255,0.4);transition:transform .25s ease,box-shadow .25s ease;animation:laboonZaloPulse 2.5s infinite;user-select:none}'
+        . '.laboon-zalo-placeholder:hover{transform:scale(1.08);box-shadow:0 6px 20px rgba(0,104,255,0.6)}'
+        . '.laboon-zalo-placeholder svg{width:100%;height:100%;display:block;border-radius:50%}'
+        . '@keyframes laboonZaloPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}'
+        . '@media(max-width:768px){.laboon-zalo-placeholder{bottom:84px;right:16px}}'
+        . 'body.lmb-drawer-open .laboon-zalo-placeholder{display:none!important}'
+        . '</style>';
+
+    $zalo_lazy = $zalo_placeholder . '<script id="laboon-zalo-lazy">'
+        . '(function(){'
+        . 'var loaded=!1;'
+        . 'function loadZalo(){'
+        . '  if(loaded)return;'
+        . '  loaded=!0;'
+        . '  var p=document.getElementById("laboon-zalo-placeholder");'
+        . '  if(p){p.style.display="none";}'
+        . '  var s=document.createElement("script");'
+        . '  s.src="https://sp.zalo.me/plugins/sdk.js";'
+        . '  s.async=!0;'
+        . '  document.body.appendChild(s);'
+        . '}'
+        . 'var placeholder=document.getElementById("laboon-zalo-placeholder");'
+        . 'if(placeholder){'
+        . '  placeholder.addEventListener("click",loadZalo,{once:!0});'
+        . '  placeholder.addEventListener("touchstart",loadZalo,{once:!0,passive:!0});'
+        . '}'
+        . 'function deferLoad(){'
+        . '  if("requestIdleCallback" in window){'
+        . '    requestIdleCallback(function(){setTimeout(loadZalo,3000);},{timeout:8000});'
+        . '  } else {'
+        . '    setTimeout(loadZalo,5000);'
+        . '  }'
+        . '}'
+        . 'if(document.readyState==="complete"){'
+        . '  deferLoad();'
+        . '} else {'
+        . '  window.addEventListener("load",deferLoad,{once:!0});'
+        . '}'
+        . '})()</script>';
 
     return str_replace( $zalo_original, $zalo_lazy, $html );
 }
