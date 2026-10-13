@@ -42,9 +42,31 @@ function kababi_child_preload_first_visit_assets() {
     ?>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="image" href="https://laboon.vn/wp-content/uploads/2021/09/bg_slide_h2.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="https://laboon.vn/wp-content/uploads/2021/09/bg_slide_h2.webp" type="image/webp" fetchpriority="high">
 <link rel="preload" as="image" href="https://laboon.vn/wp-content/uploads/2025/06/cover-copy1_1.webp" type="image/webp" fetchpriority="high">
 <style>
+/* CLS & Layout stability: Reserve space for carousels and images */
+.elementor-element-1aa1f54 .elementor-image-carousel-wrapper {
+    aspect-ratio: 1920 / 800;
+    min-height: 380px;
+}
+.elementor-element-d33b0e7 .elementor-image-carousel-wrapper {
+    aspect-ratio: 768 / 1024;
+    min-height: 360px;
+}
+.swiper-slide-inner {
+    position: relative;
+    width: 100%;
+    background-color: #f7f7f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.elementor-image-carousel .swiper-slide-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
 /* Skeleton and Spinner for Swiper lazy load */
 img[data-src]:not([src]), img.swiper-lazy:not(.swiper-lazy-loaded) {
     opacity: 0 !important;
@@ -58,14 +80,6 @@ img[data-src]:not([src]), img.swiper-lazy:not(.swiper-lazy-loaded) {
 .swiper-container:not(.swiper-initialized),
 .swiper:not(.swiper-initialized) {
     overflow: hidden !important;
-}
-.swiper-slide-inner {
-    position: relative;
-    min-height: 400px; /* Adjust based on typical banner height */
-    background-color: #f0f0f0; /* Skeleton background */
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 .swiper-lazy-preloader {
     width: 42px;
@@ -217,8 +231,60 @@ function kababi_child_apply_lazy_images( $html ) {
     }
 
     $html = $processor->get_updated_html();
+    $html = kababi_child_optimize_image_sources( $html );
     $html = kababi_child_add_font_display_swap( $html );
     return kababi_child_defer_non_critical_scripts( $html );
+}
+
+function kababi_child_optimize_image_sources( $html ) {
+    $replacements = array(
+        // Fix 404 images with correct 2025/2026 WebP equivalents
+        'web130__0000s_0000_15.05.23_COFFEE_PHOTO0012-1.jpg'      => 'bac-siu.webp',
+        'web130__0000s_0001_15.05.23_COFFEE_PHOTO0018-copy.jpg'   => 'cafe-den-1.webp',
+        'web130__0004_LB-Nhom-TRA-TRAI-CAY-tra-lai-dac-thom.jpg'   => 'Tra-Lai-Dac-Thom.webp',
+        'web130__0006_LB-Nhom-TRA-TRAI-CAY-tra-tac-mat-ong.jpg'    => 'Hong-Tra-Chanh-Mat-Ong.webp',
+        'web130__0018_LB-Nhom-SUA-TUOI-sua-tuoi-tran-chau-duong-den.jpg' => 'Sua-Tuoi-Tran-Chau.webp',
+        'web130__0029_LB-Nhom-TRA-MACCHIATO-NEW-olong-hat-sen-machi.jpg' => 'Sen-Vang-Macchiato.webp',
+        'web130__0032_LB-Nhom-TRA-SUA-tra-sua-Laboon.jpg'          => 'Tra-Sua-Laboon.webp',
+        'web130__0043_LB-Nhom-TRA-SUA-tra-sua-truyen-thong-KTK.jpg'=> 'Tra-Sua-Truyen-Thong.webp',
+
+        // Upgrade heavy 6.6MB Carousel JPGs to 0.7MB WebP versions
+        '/wp-content/uploads/2026/05/1.jpg'   => '/wp-content/uploads/2026/05/1.webp',
+        '/wp-content/uploads/2026/05/2.jpg'   => '/wp-content/uploads/2026/05/2.webp',
+        '/wp-content/uploads/2026/05/3.jpg'   => '/wp-content/uploads/2026/05/3.webp',
+        '/wp-content/uploads/2026/05/4.jpg'   => '/wp-content/uploads/2026/05/4.webp',
+        '/wp-content/uploads/2026/05/5.jpg'   => '/wp-content/uploads/2026/05/5.webp',
+        '/wp-content/uploads/2026/05/1-1.jpg' => '/wp-content/uploads/2026/05/1-1.webp',
+        '/wp-content/uploads/2026/05/2-1.jpg' => '/wp-content/uploads/2026/05/2-1.webp',
+        '/wp-content/uploads/2026/05/3-1.jpg' => '/wp-content/uploads/2026/05/3-1.webp',
+        '/wp-content/uploads/2026/05/4-1.jpg' => '/wp-content/uploads/2026/05/4-1.webp',
+        '/wp-content/uploads/2026/05/5-1.jpg' => '/wp-content/uploads/2026/05/5-1.webp',
+
+        // Upgrade banner slide bg to WebP
+        '/wp-content/uploads/2021/09/bg_slide_h2.jpg' => '/wp-content/uploads/2021/09/bg_slide_h2.webp',
+    );
+
+    // Map the 404 old folder 2023/10/ into 2025/07/ for menu items
+    $html = preg_replace_callback(
+        '#https://laboon\.vn/wp-content/uploads/2023/10/(web130__[^\s"\'>]+)#',
+        function( $m ) use ( $replacements ) {
+            $filename = $m[1];
+            if ( isset( $replacements[ $filename ] ) ) {
+                return 'https://laboon.vn/wp-content/uploads/2025/07/' . $replacements[ $filename ];
+            }
+            return $m[0];
+        },
+        $html
+    );
+
+    // Map remaining static paths
+    foreach ( $replacements as $old_path => $new_path ) {
+        if ( 0 === strpos( $old_path, '/' ) ) {
+            $html = str_replace( $old_path, $new_path, $html );
+        }
+    }
+
+    return $html;
 }
 
 function kababi_child_should_lazy_load_image( $processor, $image_index, $eager_image_skip ) {
